@@ -19,10 +19,6 @@ public class Checker  {
         }return true;
     }
 
-
-
-
-
     private List<Callable<Boolean>> divideBuffer(byte[] buffer) {
         List<Object> list = new ArrayList<>();
         for (int i = 0; i < buffer.length; i++) {

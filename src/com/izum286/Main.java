@@ -28,8 +28,8 @@ public class Main {
             isPassed = checker.check(rawData);
             pointer = pointer + chunkSize;
             cycles++;
-            System.out.println(cycles);
-        }
+
+        }System.out.println(cycles);
 
         if (!isPassed){
             System.out.println("File not passed");

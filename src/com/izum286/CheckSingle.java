@@ -15,6 +15,7 @@ public class CheckSingle implements Callable<Boolean> {
 
     @Override
     public Boolean call() throws Exception {
+        long start = System.nanoTime();
         Map<Byte, Integer> map = new HashMap<>();
         ArrayList<Byte> res = new ArrayList<>();
         for (int i=0;i<single.length;i++){
@@ -26,7 +27,8 @@ public class CheckSingle implements Callable<Boolean> {
                 res.add(pattern[i]);
             }
         }
-        return (pattern.length / 2 + 1) >= res.size();
+        System.out.println(System.nanoTime()-start  +" "+Thread.currentThread().getId());
+        return res.size()>=(pattern.length/2)+1;
     }
 
 }
