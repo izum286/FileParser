@@ -1,5 +1,7 @@
 package com.izum286;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,10 +17,19 @@ public class Checker implements Runnable {
     }
 
     boolean check(byte[] buffer){
-        byte[] singleChunk = new byte[buffer.length / numThreads];
-        for (int i = 0; i < buffer.length; i++) {
+        List<Object> list = divideBuffer(buffer);
+    }
 
+    private List<Object> divideBuffer(byte[] buffer) {
+        List<Object> list = new ArrayList<>();
+        for (int i = 0; i < buffer.length; i++) {
+            byte[] singleChunk = new byte[buffer.length / numThreads];
+            for (int j = 0; j < singleChunk.length; j++) {
+                singleChunk[j] = buffer[i];
+            }
+            list.add(singleChunk);
         }
+        return list;
     }
 
 }
