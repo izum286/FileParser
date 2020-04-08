@@ -11,19 +11,24 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException, TimeoutException {
         Checker checker = new Checker();
-        RandomAccessFile aFile = new RandomAccessFile("file patch", "r");
-        FileChannel fileChannel = aFile.getChannel();
-        int chunkSize = 2048; //chunk size in bytes
-        long position = 0;
-        boolean isPassed = true;
+        RandomAccessFile aFile = new RandomAccessFile("/test/1234.txt", "r");
 
-        while (position >= 0 || isPassed){ //change condition while end of the file
+        FileChannel fileChannel = aFile.getChannel();
+        int chunkSize = 10000; //chunk size in bytes
+        long pointer = 0;
+        boolean isPassed = true;
+        int readbytes = 0;
+        long cycles =0;
+
+        while (readbytes >= 0 && isPassed){ //change condition while end of the file
             ////порезать файл на куски и скормить чекеру
             ByteBuffer buffer = ByteBuffer.allocate(chunkSize);
-            fileChannel.read(buffer, position);
+            readbytes = fileChannel.read(buffer, pointer);
             byte[] rawData = buffer.array();
             isPassed = checker.check(rawData);
-            position = fileChannel.position() + chunkSize;
+            pointer = pointer + chunkSize;
+            cycles++;
+            System.out.println(cycles);
         }
 
         if (!isPassed){
