@@ -1,26 +1,29 @@
 package com.izum286;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.*;
+import java.util.concurrent.*;
 
-public class Checker implements Runnable {
+public class Checker  {
     int numThreads = Runtime.getRuntime().availableProcessors();
     ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
 
-    byte[] pattern = new byte[]{2,13,44,55,7,12,5};
-    @Override
-    public void run() {
 
+
+
+    boolean check(byte[] buffer) throws InterruptedException, ExecutionException, TimeoutException {
+        List<Future<Boolean>> res = executorService.invokeAll(divideBuffer(buffer));
+        for (Future<Boolean> future: res){
+            if (!future.get().booleanValue()){
+                return false;
+            }
+        }return true;
     }
 
-    boolean check(byte[] buffer){
-        List<Object> list = divideBuffer(buffer);
-    }
 
-    private List<Object> divideBuffer(byte[] buffer) {
+
+
+
+    private List<Callable<Boolean>> divideBuffer(byte[] buffer) {
         List<Object> list = new ArrayList<>();
         for (int i = 0; i < buffer.length; i++) {
             byte[] singleChunk = new byte[buffer.length / numThreads];
@@ -29,7 +32,11 @@ public class Checker implements Runnable {
             }
             list.add(singleChunk);
         }
-        return list;
+        List<Callable<Boolean>> tasks = new ArrayList<>();
+        for(Object check: list){
+            tasks.add(new CheckSingle((byte[]) check));
+        }
+        return tasks;
     }
 
 }
