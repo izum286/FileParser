@@ -18,8 +18,8 @@ public class Main {
         long pointer = 0;
         boolean isPassed = true;
         int readbytes = 0;
-        long cycles =0;
 
+        long start = System.nanoTime();
         while (readbytes >= 0 && isPassed){ //change condition while end of the file
             ////порезать файл на куски и скормить чекеру
             ByteBuffer buffer = ByteBuffer.allocate(chunkSize);
@@ -27,14 +27,15 @@ public class Main {
             byte[] rawData = buffer.array();
             isPassed = checker.check(rawData);
             pointer = pointer + chunkSize;
-            cycles++;
 
-        }System.out.println(cycles);
 
+        }
         if (!isPassed){
             System.out.println("File not passed");
         }else {
             System.out.println("Passed");
         }
+
+        System.out.println((System.nanoTime()-start)/100000);
     }
 }

@@ -18,6 +18,8 @@ public class CheckSingle implements Callable<Boolean> {
         long start = System.nanoTime();
         Map<Byte, Integer> map = new HashMap<>();
         ArrayList<Byte> res = new ArrayList<>();
+
+
         for (int i=0;i<single.length;i++){
             map.put(single[i], map.getOrDefault(single[i], 0)+1);
         }
@@ -27,8 +29,8 @@ public class CheckSingle implements Callable<Boolean> {
                 res.add(pattern[i]);
             }
         }
-        System.out.println(System.nanoTime()-start  +" "+Thread.currentThread().getId());
-        return res.size()>=(pattern.length/2)+1;
+//        System.out.println(System.nanoTime()-start  +" "+Thread.currentThread().getId());
+        return res.size()<=(pattern.length/2)+1;
     }
 
 }
